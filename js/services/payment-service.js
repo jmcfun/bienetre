@@ -27,12 +27,10 @@ export class PaymentService {
     }
 
     async startSubscriptionCheck() {
-        // Créer une alarme pour vérifier régulièrement l'abonnement
         chrome.alarms.create('checkSubscription', {
-            periodInMinutes: 60 // Vérifier toutes les heures
+            periodInMinutes: 60
         });
 
-        // Écouter l'alarme
         chrome.alarms.onAlarm.addListener(async (alarm) => {
             if (alarm.name === 'checkSubscription') {
                 await this.verifySubscription();
@@ -44,21 +42,13 @@ export class PaymentService {
         try {
             const plan = this.PLANS[planId === this.PLANS.MONTHLY.id ? 'MONTHLY' : 'ANNUAL'];
             
-            // En mode développement, simuler l'abonnement
             if (await this.isDevMode()) {
                 return await this.simulateSubscription(planId);
             }
 
-            // En production, ouvrir la page de paiement
+            // Rediriger vers la page de l'extension dans le Chrome Web Store
             const storeUrl = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
             await chrome.tabs.create({ url: storeUrl });
-
-            await chrome.storage.sync.set({ 
-                selectedPlan: {
-                    id: planId,
-                    timestamp: Date.now()
-                }
-            });
 
             return true;
         } catch (error) {
@@ -78,12 +68,10 @@ export class PaymentService {
             const expiryTime = new Date(subscriptionInfo.expiryTime).getTime();
             const isActive = now < expiryTime;
 
-            // Si l'abonnement a expiré, notifier l'utilisateur
             if (!isActive && subscriptionInfo.active) {
                 await this.handleExpiredSubscription(subscriptionInfo);
             }
 
-            // Mettre à jour le statut
             subscriptionInfo.active = isActive;
             await chrome.storage.sync.set({
                 [this.SUBSCRIPTION_KEY]: subscriptionInfo
@@ -93,10 +81,8 @@ export class PaymentService {
                 active: isActive,
                 expiryDate: new Date(expiryTime),
                 plan: subscriptionInfo.plan,
-                renewalDate: new Date(expiryTime),
                 daysLeft: Math.ceil((expiryTime - now) / (1000 * 60 * 60 * 24))
             };
-
         } catch (error) {
             console.error('Erreur lors de la vérification de l\'abonnement:', error);
             return false;
@@ -104,7 +90,6 @@ export class PaymentService {
     }
 
     async handleExpiredSubscription(subscriptionInfo) {
-        // Notifier l'utilisateur
         chrome.notifications.create('subscription_expired', {
             type: 'basic',
             iconUrl: '/images/icon48.png',
@@ -113,50 +98,20 @@ export class PaymentService {
             priority: 2
         });
 
-        // Désactiver les fonctionnalités premium
         await this.deactivatePremiumFeatures();
     }
 
     async deactivatePremiumFeatures() {
-        // Réinitialiser le statut premium
         await chrome.storage.sync.set({
             isPremium: false
         });
 
-        // Envoyer un message pour mettre à jour l'interface
         chrome.runtime.sendMessage({
             type: 'SUBSCRIPTION_EXPIRED'
         });
     }
 
-    async renewSubscription(planId) {
-        // Gérer le renouvellement
-        return this.handlePayment(planId);
-    }
-
-    async cancelSubscription() {
-        try {
-            const subscriptionInfo = await this.verifySubscription();
-            if (!subscriptionInfo.active) return;
-
-            // En mode développement, simuler l'annulation
-            if (await this.isDevMode()) {
-                await chrome.storage.sync.remove(this.SUBSCRIPTION_KEY);
-                await this.deactivatePremiumFeatures();
-                return true;
-            }
-
-            // En production, rediriger vers la page de gestion des abonnements
-            const managementUrl = 'https://chrome.google.com/webstore/devconsole/';
-            await chrome.tabs.create({ url: managementUrl });
-            return true;
-        } catch (error) {
-            console.error('Erreur lors de l\'annulation:', error);
-            throw error;
-        }
-    }
-
-    // Méthode de simulation pour le développement
+    // Pour le développement uniquement
     async simulateSubscription(planId) {
         const plan = this.PLANS[planId === this.PLANS.MONTHLY.id ? 'MONTHLY' : 'ANNUAL'];
         const now = new Date();
@@ -173,8 +128,7 @@ export class PaymentService {
             purchaseDate: now.toISOString(),
             expiryTime: expiryTime.toISOString(),
             plan: planId,
-            orderId: `DEV_${Date.now()}`,
-            autoRenew: true
+            orderId: `DEV_${Date.now()}`
         };
 
         await chrome.storage.sync.set({

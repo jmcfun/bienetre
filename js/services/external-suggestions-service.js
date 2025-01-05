@@ -1,5 +1,7 @@
 export class ExternalSuggestionsService {
     constructor() {
+        this.MAX_SUGGESTIONS = 3; // Constante pour la limite
+        
         // Suggestions par défaut en français
         this.DEFAULT_SUGGESTIONS = [
             {
@@ -28,40 +30,23 @@ export class ExternalSuggestionsService {
                 category: 'activité physique',
                 duration: '15 minutes',
                 url: 'https://www.ameli.fr'
-            },
-            {
-                id: 'default-4',
-                title: 'Journal de gratitude',
-                description: 'Prenez 5 minutes pour noter trois choses positives de votre journée.',
-                source: 'HAS',
-                category: 'bien-être',
-                duration: '5 minutes',
-                url: 'https://www.has-sante.fr'
-            },
-            {
-                id: 'default-5',
-                title: 'Étirements doux',
-                description: 'Série d\'étirements simples pour détendre le corps et l\'esprit.',
-                source: 'INSERM',
-                category: 'activité physique',
-                duration: '10 minutes',
-                url: 'https://www.inserm.fr'
             }
         ];
     }
 
     async fetchSuggestions(userStats = null) {
         console.log('Récupération des suggestions personnalisées...');
-        return this.getDefaultSuggestions(userStats);
+        const suggestions = this.getDefaultSuggestions(userStats);
+        return suggestions.slice(0, this.MAX_SUGGESTIONS);
     }
 
     getDefaultSuggestions(userStats) {
-        // Si pas assez de données utilisateur, renvoyer toutes les suggestions par défaut
+        // Si pas assez de données utilisateur, renvoyer les 3 suggestions par défaut
         if (!userStats || !this.hasEnoughData(userStats)) {
             return this.DEFAULT_SUGGESTIONS;
         }
 
-        // Filtrer et trier les suggestions selon les besoins de l'utilisateur
+        // Filtrer les suggestions selon les besoins de l'utilisateur
         const filteredSuggestions = this.DEFAULT_SUGGESTIONS.filter(suggestion => {
             if (userStats.stressLevel > 3 && suggestion.category === 'stress') return true;
             if (userStats.moodTrend < 3 && suggestion.category === 'bien-être') return true;
@@ -69,8 +54,15 @@ export class ExternalSuggestionsService {
             return false;
         });
 
-        // Si aucune suggestion ne correspond aux critères, renvoyer les suggestions par défaut
-        return filteredSuggestions.length > 0 ? filteredSuggestions : this.DEFAULT_SUGGESTIONS;
+        // Si on n'a pas assez de suggestions filtrées, compléter avec les suggestions par défaut
+        if (filteredSuggestions.length < this.MAX_SUGGESTIONS) {
+            const remainingSuggestions = this.DEFAULT_SUGGESTIONS
+                .filter(s => !filteredSuggestions.find(fs => fs.id === s.id))
+                .slice(0, this.MAX_SUGGESTIONS - filteredSuggestions.length);
+            return [...filteredSuggestions, ...remainingSuggestions];
+        }
+        
+        return filteredSuggestions.slice(0, this.MAX_SUGGESTIONS);
     }
 
     hasEnoughData(stats) {

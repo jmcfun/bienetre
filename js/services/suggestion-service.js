@@ -3,11 +3,16 @@ import { ExternalSuggestionsService } from './external-suggestions-service.js';
 export class SuggestionService {
     constructor() {
         this.externalService = new ExternalSuggestionsService();
+        this.MAX_SUGGESTIONS = 3; // Limite de suggestions
     }
 
     async getSuggestions(entries) {
         const stats = this.analyzeEntries(entries);
-        return this.externalService.fetchSuggestions(stats);
+        const suggestions = await this.externalService.fetchSuggestions(stats);
+        
+        // Limiter à 3 suggestions les plus pertinentes
+        return this.prioritizeSuggestions(suggestions, stats)
+            .slice(0, this.MAX_SUGGESTIONS);
     }
 
     analyzeEntries(entries) {
@@ -145,7 +150,7 @@ export class SuggestionService {
                 priority: this.calculateSuggestionPriority(suggestion, stats)
             }))
             .sort((a, b) => b.priority - a.priority)
-            .slice(0, 5); // Retourner les 5 meilleures suggestions
+            .slice(0, this.MAX_SUGGESTIONS); // S'assurer de ne jamais dépasser 3 suggestions
     }
 
     calculateSuggestionPriority(suggestion, stats) {

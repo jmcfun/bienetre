@@ -15,27 +15,61 @@
             <div class="modal-content">
                 <h3>Exporter les données</h3>
                 <div class="export-options">
+                    <!-- Format d'export -->
                     <div class="option-group">
                         <label>Format</label>
-                        <select id="exportFormat">
-                            <option value="csv">CSV (Excel)</option>
-                            <option value="json">JSON</option>
-                            <option value="txt">Texte simple</option>
-                        </select>
+                        <div class="format-options">
+                            <div class="format-option active" data-format="csv">
+                                CSV
+                            </div>
+                            <div class="format-option" data-format="json">
+                                JSON
+                            </div>
+                            <div class="format-option" data-format="txt">
+                                TXT
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Période -->
                     <div class="option-group">
                         <label>Période</label>
-                        <select id="exportPeriod">
-                            <option value="all">Tout l'historique</option>
-                            <option value="year">Dernière année</option>
-                            <option value="month">Dernier mois</option>
-                            <option value="week">Dernière semaine</option>
-                        </select>
+                        <div class="period-options">
+                            <div class="period-option active" data-period="all">
+                                Tout
+                            </div>
+                            <div class="period-option" data-period="month">
+                                Mois
+                            </div>
+                            <div class="period-option" data-period="week">
+                                Semaine
+                            </div>
+                            <div class="period-option" data-period="custom">
+                                Personnalisé
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates personnalisées (initialement cachées) -->
+                    <div class="option-group custom-dates" style="display: none;">
+                        <div class="date-inputs">
+                            <div>
+                                <label>Du</label>
+                                <input type="date" id="startDate">
+                            </div>
+                            <div>
+                                <label>Au</label>
+                                <input type="date" id="endDate">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-actions">
-                    <button id="cancelExport" class="secondary-btn">Annuler</button>
-                    <button id="confirmExport" class="primary-btn">Exporter</button>
+
+                <div class="export-actions">
+                    <button class="cancel-btn" id="cancelExport">Annuler</button>
+                    <button class="export-btn" id="confirmExport">
+                        <span class="icon">📥</span> Exporter
+                    </button>
                 </div>
             </div>
         </div>
@@ -282,23 +316,6 @@
                     <div id="premiumStatus" class="premium-status">
                         <span class="status-icon">⭐</span>
                         <span class="status-text">Version gratuite</span>
-                        <div class="dev-controls">
-                            <div class="dev-mode-switch">
-                                <label class="switch">
-                                    <input type="checkbox" id="devModeToggle">
-                                    <span class="slider round"></span>
-                                </label>
-                                <span class="dev-mode-label">Mode Essai</span>
-                            </div>
-                            <div class="premium-mode-switch">
-                                <label class="switch">
-                                    <input type="checkbox" id="premiumModeToggle">
-                                    <span class="slider round"></span>
-                                </label>
-                                <span class="dev-mode-label">Mode Premium</span>
-                            </div>
-                            <button id="resetTrialBtn" class="dev-btn">Réinitialiser Essai</button>
-                        </div>
                     </div>
                 </div>
             </div>

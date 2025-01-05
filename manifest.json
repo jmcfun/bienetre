@@ -3,9 +3,7 @@
   "name": "Journal d'Humeur & Bien-être",
   "description": "Suivez votre humeur quotidienne et améliorez votre bien-être mental avec des analyses personnalisées",
   "version": "0.0.0.1",
-  "author": "Votre nom",
-  "homepage_url": "URL de votre site web",
-  "default_locale": "fr",
+  "author": "Jmcfunonline",
   "permissions": [
     "storage",
     "notifications",

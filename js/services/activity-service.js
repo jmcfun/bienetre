@@ -1,48 +1,81 @@
 // Service pour gérer les activités
 export class ActivityService {
     constructor() {
-        this.googleAuth = null; // Configuration de l'authentification Google
+        this.STORAGE_KEY = 'activityData';
     }
 
-    async getActivities(date) {
+    async getActivities() {
         try {
-            // Récupérer les événements du calendrier
-            const events = await this.getGoogleCalendarEvents(date);
-            // Récupérer les activités physiques
-            const workouts = await this.getStravaActivities(date);
-
+            // Pour l'instant, retourner des données simulées
             return {
-                events: this.categorizeEvents(events),
-                workouts: this.categorizeWorkouts(workouts)
+                todayActivities: [
+                    {
+                        type: 'physical',
+                        description: 'Activité physique modérée',
+                        intensity: 0.6,
+                        icon: '🏃'
+                    },
+                    {
+                        type: 'social',
+                        description: 'Interactions sociales',
+                        intensity: 0.4,
+                        icon: '👥'
+                    }
+                ],
+                weeklyStats: {
+                    physicalActivity: 3,
+                    socialActivity: 4,
+                    restDays: 2
+                },
+                trends: {
+                    increasing: ['physical'],
+                    decreasing: [],
+                    stable: ['social']
+                }
             };
         } catch (error) {
             console.error('Erreur lors de la récupération des activités:', error);
-            return null;
+            return {
+                todayActivities: [],
+                weeklyStats: {
+                    physicalActivity: 0,
+                    socialActivity: 0,
+                    restDays: 0
+                },
+                trends: {
+                    increasing: [],
+                    decreasing: [],
+                    stable: []
+                }
+            };
         }
     }
 
-    categorizeEvents(events) {
-        // Catégoriser les événements par type (travail, loisir, social...)
-        return events.map(event => ({
-            type: this.detectEventType(event.summary),
-            duration: this.calculateDuration(event.start, event.end),
-            isPositive: this.isPositiveEvent(event.summary)
-        }));
+    async saveActivity(activity) {
+        try {
+            const currentData = await this.getActivities();
+            currentData.todayActivities.push(activity);
+            await chrome.storage.local.set({
+                [this.STORAGE_KEY]: currentData
+            });
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de l\'enregistrement de l\'activité:', error);
+            return false;
+        }
     }
 
-    detectEventType(summary) {
-        const keywords = {
-            work: ['réunion', 'travail', 'projet'],
-            social: ['dîner', 'sortie', 'amis'],
-            leisure: ['sport', 'loisir', 'détente'],
-            health: ['médecin', 'santé', 'rdv']
-        };
-
-        for (const [type, words] of Object.entries(keywords)) {
-            if (words.some(word => summary.toLowerCase().includes(word))) {
-                return type;
-            }
-        }
-        return 'other';
+    calculateActivityScore(activities) {
+        if (!activities || activities.length === 0) return 0;
+        
+        return activities.reduce((score, activity) => {
+            const weights = {
+                physical: 0.4,
+                social: 0.3,
+                leisure: 0.2,
+                work: 0.1
+            };
+            return score + (activity.intensity * (weights[activity.type] || 0.1));
+        }, 0) / activities.length;
     }
 } 

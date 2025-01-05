@@ -11,7 +11,7 @@
     <div class="container">
         <!-- Banner Premium -->
         <div class="premium-banner">
-            <p>Essayez Premium gratuitement pendant 7 jours !</p>
+            <p>Essayez Premium gratuitement pendant 14 jours !</p>
             <button class="try-premium-btn">
                 <span class="icon">✨</span> Essayer Premium
             </button>
@@ -64,16 +64,28 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="energy-level">
-            <label>Niveau d'énergie</label>
-            <input type="range" min="1" max="5" value="3">
-        </div>
-        
-        <div class="stress-level">
-            <label>Niveau de stress</label>
-            <input type="range" min="1" max="5" value="3">
+            <div class="metric-group">
+                <label>Niveau d'énergie</label>
+                <div class="range-input">
+                    <input type="range" class="energy-level" min="1" max="5" value="3">
+                    <div class="range-labels">
+                        <span>Très faible</span>
+                        <span>Très élevé</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric-group">
+                <label>Niveau de stress</label>
+                <div class="range-input">
+                    <input type="range" class="stress-level" min="1" max="5" value="3">
+                    <div class="range-labels">
+                        <span>Très bas</span>
+                        <span>Très élevé</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="notes-section">
@@ -88,6 +100,5 @@
     </div>
     <script type="module" src="js/popup.js"></script>
     <script type="module" src="js/premium.js"></script>
-    <script src="vendor/stripe.js"></script>
 </body>
 </html> 

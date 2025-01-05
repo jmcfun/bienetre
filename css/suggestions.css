@@ -52,8 +52,10 @@
 .suggestion-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
 }
 
 .category {
@@ -90,4 +92,116 @@
     border-radius: var(--border-radius);
     text-align: center;
     margin: 20px 0;
+}
+
+/* Styles pour les analyses avancées */
+.advanced-analytics {
+    padding: 15px;
+    background: var(--card-background);
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.advanced-analytics h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.premium-badge {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.prediction-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.prediction-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.prediction-label {
+    min-width: 80px;
+    font-weight: 500;
+}
+
+.prediction-value {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.confidence-bar {
+    flex: 1;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+.mood-prediction {
+    font-weight: 500;
+    font-size: 1.1em;
+    min-width: 60px;
+}
+
+.confidence-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.confidence-label {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    min-width: 70px;
+}
+
+@media (max-width: 480px) {
+    .prediction-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .prediction-value {
+        width: 100%;
+    }
+
+    .weather-info {
+        width: 100%;
+        justify-content: flex-start;
+    }
 } 

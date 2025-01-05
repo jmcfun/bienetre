@@ -77,26 +77,51 @@ body {
 }
 
 .premium-overlay {
-    display: none;
-    position: absolute;
+    position: absolute !important;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(4px);
-    border-radius: var(--border-radius);
-    z-index: 10;
-}
-
-.premium-overlay.active {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.premium-feature.locked .premium-overlay {
+    opacity: 1;
+}
+
+.premium-overlay-content {
     text-align: center;
     color: white;
+    padding: 20px;
+}
+
+.premium-lock {
+    font-size: 2em;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.upgrade-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s ease;
+}
+
+.upgrade-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
 }
 
 .premium-badge {
@@ -234,39 +259,13 @@ input:checked + .slider:before {
 }
 
 .premium-feature {
+    position: relative !important;
+    overflow: hidden;
     margin-bottom: 20px;
     padding: 15px;
     border-radius: var(--border-radius);
     background: white;
     box-shadow: var(--shadow);
-    position: relative;
-}
-
-.premium-feature.locked::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    border-radius: var(--border-radius);
-    z-index: 10;
-}
-
-.premium-feature.locked::after {
-    content: '🔒 Premium';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: 500;
-    font-size: 1.2em;
-    z-index: 11;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    white-space: nowrap;
 }
 
 /* Styles des modales */
@@ -291,8 +290,158 @@ input:checked + .slider:before {
     background: var(--card-background);
     padding: 20px;
     border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
     max-width: 500px;
     width: 90%;
+    margin: 20px auto;
+}
+
+.export-options {
+    margin: 20px 0;
+}
+
+.option-group {
+    margin-bottom: 15px;
+}
+
+.option-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.export-options select,
+.export-options input[type="date"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    background: var(--background-color);
+    color: var(--text-color);
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.export-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.export-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.export-actions .cancel-btn {
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.export-actions .export-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.export-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.export-actions .cancel-btn:hover {
+    background: #e0e0e0;
+}
+
+.export-actions .export-btn:hover {
+    background: var(--secondary-color);
+}
+
+/* Style pour les options de période */
+.period-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.period-option {
+    padding: 8px;
+    text-align: center;
+    background: var(--background-color);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.period-option:hover {
+    background: #f0f0f0;
+}
+
+.period-option.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Style pour le format de fichier */
+.format-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.format-option {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background: var(--background-color);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.format-option:hover {
+    background: #f0f0f0;
+}
+
+.format-option.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .period-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .format-options {
+        flex-direction: column;
+    }
+
+    .export-actions {
+        flex-direction: column;
+    }
+
+    .export-actions button {
+        width: 100%;
+    }
 }
 
 /* Styles des suggestions */
@@ -856,34 +1005,4 @@ input:checked + .slider:before {
 
 .secondary-btn:hover {
     background: #d5d5d5;
-}
-
-/* Styles pour les contrôles de développement */
-.dev-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
-}
-
-.dev-mode-switch,
-.premium-mode-switch {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.dev-btn {
-    padding: 4px 8px;
-    background: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.dev-btn:hover {
-    background: #e0e0e0;
 } 

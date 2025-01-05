@@ -6,8 +6,8 @@ let currentMood = null;
 
 // Sélecteurs DOM
 const moodButtons = document.querySelectorAll('.mood-btn');
-const energyLevel = document.querySelector('.energy-level input');
-const stressLevel = document.querySelector('.stress-level input');
+const energyLevel = document.querySelector('input.energy-level');
+const stressLevel = document.querySelector('input.stress-level');
 const notesInput = document.querySelector('.notes-section textarea');
 const saveButton = document.querySelector('.save-btn');
 

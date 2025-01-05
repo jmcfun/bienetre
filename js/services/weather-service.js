@@ -94,4 +94,19 @@ export class WeatherService {
         return temperature >= 15 && temperature <= 25 && 
                !['Rain', 'Snow', 'Thunderstorm', 'Fog'].includes(conditions);
     }
+
+    async getCurrentWeather() {
+        try {
+            // Simuler des données météo pour l'instant
+            return {
+                temperature: 20,
+                description: 'Partiellement nuageux',
+                icon: '⛅',
+                isGoodWeather: true
+            };
+        } catch (error) {
+            console.error('Erreur récupération météo:', error);
+            return null;
+        }
+    }
 } 

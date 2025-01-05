@@ -70,39 +70,28 @@ export class SuggestionsView {
     }
 
     renderSuggestions(suggestions) {
-        if (!this.contentContainer) return;
+        if (!suggestions || suggestions.length === 0) {
+            this.contentContainer.innerHTML = `
+                <div class="no-suggestions">
+                    <p>Aucune suggestion disponible pour le moment.</p>
+                </div>
+            `;
+            return;
+        }
 
         this.contentContainer.innerHTML = suggestions.map(suggestion => `
-            <div class="suggestion-item">
+            <div class="suggestion-card">
                 <div class="suggestion-header">
                     <h4>${suggestion.title}</h4>
-                    <div class="suggestion-meta">
-                        <span class="duration">${suggestion.duration}</span>
-                        <span class="source">${suggestion.source}</span>
-                    </div>
+                    <span class="duration">${suggestion.duration}</span>
                 </div>
-                <p class="suggestion-description">${suggestion.description}</p>
+                <p class="description">${suggestion.description}</p>
                 <div class="suggestion-footer">
-                    <span class="category">${suggestion.category}</span>
-                    <a href="${suggestion.url}" target="_blank" class="source-link">En savoir plus</a>
-                    <button class="try-suggestion-btn primary-btn" data-id="${suggestion.id}">
-                        <span class="icon">✨</span> Essayer
-                    </button>
+                    <a href="${suggestion.url}" target="_blank" class="source-link">
+                        Source: ${suggestion.source}
+                    </a>
                 </div>
             </div>
         `).join('');
-
-        this.addSuggestionListeners();
-    }
-
-    addSuggestionListeners() {
-        this.contentContainer?.querySelectorAll('.try-suggestion-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const suggestionId = btn.dataset.id;
-                await this.suggestionService.markSuggestionAsTried(suggestionId);
-                btn.classList.add('tried');
-                btn.innerHTML = '<span class="icon">✓</span> Essayé';
-            });
-        });
     }
 } 

@@ -57,6 +57,9 @@ function updatePremiumOverlays() {
 
 // Gestion des onglets et initialisation
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialiser l'UI d'export
+    exportService.initializeExportUI();
+
     try {
         // Initialiser le switch mode dev
         const devModeToggle = document.getElementById('devModeToggle');
@@ -120,34 +123,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         await premiumFeatures.init();
         await updatePanelData();
-
-        // Gestion de l'exportation
-        const confirmExportBtn = document.getElementById('confirmExport');
-        if (confirmExportBtn) {
-            confirmExportBtn.addEventListener('click', async () => {
-                try {
-                    const format = document.getElementById('exportFormat').value;
-                    const period = document.getElementById('exportPeriod').value;
-                    
-                    const blob = await exportService.exportData(format, period);
-                    const url = URL.createObjectURL(blob);
-                    
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `journal_humeur_${period}.${format}`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    // Fermer le modal
-                    document.getElementById('exportModal').classList.remove('active');
-                } catch (error) {
-                    console.error('Erreur lors de l\'exportation:', error);
-                    showNotification('Erreur lors de l\'exportation', true);
-                }
-            });
-        }
 
     } catch (error) {
         console.error('Erreur lors de l\'initialisation:', error);
