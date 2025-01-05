@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal d'Humeur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Banner Premium -->
+        <div class="premium-banner">
+            <p>Essayez Premium gratuitement pendant 7 jours !</p>
+            <button class="try-premium-btn">
+                <span class="icon">✨</span> Essayer Premium
+            </button>
+        </div>
+
+        <h1>Comment allez-vous aujourd'hui ?</h1>
+        
+        <div class="mood-selector">
+            <button class="mood-btn" data-mood="très-bien">😊</button>
+            <button class="mood-btn" data-mood="bien">🙂</button>
+            <button class="mood-btn" data-mood="neutre">😐</button>
+            <button class="mood-btn" data-mood="pas-bien">😕</button>
+            <button class="mood-btn" data-mood="mal">😢</button>
+        </div>
+
+        <div class="additional-metrics">
+            <div class="metric-group">
+                <label>Niveau d'activité physique</label>
+                <div class="range-input">
+                    <input type="range" class="activity-level" min="1" max="5" value="3">
+                    <div class="range-labels">
+                        <span>Très faible</span>
+                        <span>Élevé</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-group">
+                <label>Qualité du sommeil</label>
+                <div class="range-input">
+                    <input type="range" class="sleep-quality" min="1" max="5" value="3">
+                    <div class="range-labels">
+                        <span>Mauvaise</span>
+                        <span>Excellente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-group">
+                <label>Interactions sociales</label>
+                <div class="range-input">
+                    <input type="range" class="social-level" min="1" max="5" value="3">
+                    <div class="range-labels">
+                        <span>Très peu</span>
+                        <span>Nombreuses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="energy-level">
+            <label>Niveau d'énergie</label>
+            <input type="range" min="1" max="5" value="3">
+        </div>
+        
+        <div class="stress-level">
+            <label>Niveau de stress</label>
+            <input type="range" min="1" max="5" value="3">
+        </div>
+
+        <div class="notes-section">
+            <textarea placeholder="Notes personnelles (optionnel)..."></textarea>
+        </div>
+
+        <button class="save-btn">Enregistrer</button>
+        <button class="stats-btn">
+            <span class="icon">📊</span>
+            Statistiques
+        </button>
+        <div class="premium-section">
+            <button class="premium-features-btn">
+                <span class="icon">✨</span>
+                Premium
+            </button>
+            <p class="premium-note">Accédez à des insights détaillés et plus encore</p>
+        </div>
+    </div>
+    <script type="module" src="js/popup.js"></script>
+    <script type="module" src="js/premium.js"></script>
+</body>
+</html> 

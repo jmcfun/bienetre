@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Journal d'Humeur & Bien-être",
+  "description": "Suivez votre humeur quotidienne et améliorez votre bien-être mental avec des analyses personnalisées",
+  "version": "1.0",
+  "permissions": [
+    "storage",
+    "notifications",
+    "alarms",
+    "sidePanel",
+    "tabs",
+    "scripting",
+    "geolocation",
+    "system.display",
+    "background"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "https://api.open-meteo.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "32": "images/icon32.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html",
+    "enabled": true
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+H",
+        "mac": "Command+Shift+H"
+      }
+    }
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png", 
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+} 

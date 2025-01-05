@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques d'Humeur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidepanel.css">
+    <link rel="stylesheet" href="css/suggestions.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Modal d'exportation -->
+        <div id="exportModal" class="modal">
+            <div class="modal-content">
+                <h3>Exporter les données</h3>
+                <div class="export-options">
+                    <div class="option-group">
+                        <label>Format</label>
+                        <select id="exportFormat">
+                            <option value="csv">CSV (Excel)</option>
+                            <option value="json">JSON</option>
+                            <option value="txt">Texte simple</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label>Période</label>
+                        <select id="exportPeriod">
+                            <option value="all">Tout l'historique</option>
+                            <option value="year">Dernière année</option>
+                            <option value="month">Dernier mois</option>
+                            <option value="week">Dernière semaine</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancelExport" class="secondary-btn">Annuler</button>
+                    <button id="confirmExport" class="primary-btn">Exporter</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="debug" style="display: none;"></div>
+        <header>
+            <h1>Votre Journal d'Humeur</h1>
+        </header>
+
+        <main>
+            <!-- Navigation par onglets -->
+            <nav class="tab-navigation">
+                <button class="tab-btn home-btn" data-tab="home">
+                    <span class="icon">🏠</span> Accueil
+                </button>
+                <button class="tab-btn" data-tab="basic-stats">
+                    <span class="icon">📊</span> Statistiques
+                </button>
+                <button class="tab-btn" data-tab="premium-features">
+                    <span class="icon">✨</span> Premium
+                </button>
+            </nav>
+            
+            <!-- Conteneur des onglets -->
+            <div class="tab-content">
+                <div id="home" class="tab-pane">
+                    <!-- Contenu de l'accueil -->
+                </div>
+                <div id="basic-stats" class="tab-pane">
+                    <section class="stats-section">
+                        <h2>Statistiques de Base</h2>
+                        <p class="stats-info">Statistiques des 7 derniers jours</p>
+                        
+                        <div class="basic-charts">
+                            <div class="mood-trends">
+                                <h3>Évolution de l'humeur</h3>
+                                <canvas id="moodChart"></canvas>
+                            </div>
+
+                            <div class="energy-stress">
+                                <h3>Énergie et Stress</h3>
+                                <canvas id="energyStressChart"></canvas>
+                            </div>
+
+                            <div class="lifestyle-metrics">
+                                <h3>Facteurs de Bien-être</h3>
+                                <canvas id="lifestyleChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="recent-notes">
+                            <h3>Notes Récentes</h3>
+                            <div class="notes-list">
+                                <!-- Rempli dynamiquement -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div id="premium-features" class="tab-pane">
+                    <section class="premium-section">
+                        <h2>Analyses Avancées <span class="premium-badge">Premium</span></h2>
+                        <div class="premium-content">
+                            <div class="premium-insights">
+                                <div class="prediction-card premium-feature">
+                                    <h3>Prédiction d'Humeur</h3>
+                                    <div class="prediction-content">
+                                        <div class="prediction-header">
+                                            <div class="prediction-mood">
+                                                <span class="prediction-label">Demain :</span>
+                                                <span class="prediction-value"></span>
+                                            </div>
+                                            <div class="prediction-confidence">
+                                                <span class="confidence-label">Confiance :</span>
+                                                <div class="confidence-bar">
+                                                    <div class="confidence-fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="weather-info"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="correlation-card premium-feature">
+                                    <h3>Facteurs d'Influence</h3>
+                                    <ul class="factors-list"></ul>
+                                </div>
+                                
+                                <div class="suggestions-section premium-feature">
+                                    <div class="suggestions-header">
+                                        <h3>Suggestions Personnalisées</h3>
+                                        <div class="source-badges">
+                                            <span class="source-badge who">OMS</span>
+                                            <span class="source-badge nhs">NHS</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="suggestions-disclaimer">
+                                        <div class="disclaimer-icon">⚠️</div>
+                                        <p class="disclaimer-text"></p>
+                                    </div>
+
+                                    <div class="suggestions-list">
+                                        <!-- Les suggestions seront injectées ici dynamiquement -->
+                                    </div>
+
+                                    <div class="suggestions-footer">
+                                        <button class="refresh-suggestions">
+                                            <span class="icon">🔄</span>
+                                            Actualiser les suggestions
+                                        </button>
+                                        <div class="last-updated">
+                                            Dernière mise à jour: <span class="update-time"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Section Objectifs -->
+                                <div class="goals-card premium-feature">
+                                    <h3>Objectifs de Bien-être</h3>
+                                    <div class="goals-content">
+                                        <div class="goals-list">
+                                            <!-- Liste des objectifs -->
+                                        </div>
+                                        <button class="add-goal-btn">
+                                            <span class="icon">➕</span> Nouvel Objectif
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Modal Nouvel Objectif -->
+                                <div id="goalModal" class="modal">
+                                    <div class="modal-content">
+                                        <h3>Définir un Nouvel Objectif</h3>
+                                        <form id="goalForm">
+                                            <div class="form-group">
+                                                <label>Type d'objectif</label>
+                                                <select id="goalType" required>
+                                                    <option value="mood">Humeur générale (1=Très mal, 5=Très bien)</option>
+                                                    <option value="activity">Activité physique (1=Sédentaire, 5=Très actif)</option>
+                                                    <option value="sleep">Qualité du sommeil (1=Mauvaise, 5=Excellente)</option>
+                                                    <option value="social">Interactions sociales (1=Isolé, 5=Très social)</option>
+                                                    <option value="stress">Niveau de stress (1=Très stressé, 5=Détendu)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Niveau à atteindre</label>
+                                                <div class="goal-target-container">
+                                                    <input type="range" id="goalTarget" min="1" max="5" step="1" required>
+                                                    <div class="goal-target-labels">
+                                                        <span>1</span>
+                                                        <span>2</span>
+                                                        <span>3</span>
+                                                        <span>4</span>
+                                                        <span>5</span>
+                                                    </div>
+                                                    <div class="goal-target-description"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Date limite</label>
+                                                <input type="date" id="goalDeadline" required>
+                                            </div>
+                                            <div class="goal-description">
+                                                <p class="goal-explanation"></p>
+                                            </div>
+                                            <div class="modal-actions">
+                                                <button type="button" class="secondary-btn" id="cancelGoal">Annuler</button>
+                                                <button type="submit" class="primary-btn">Créer</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Section Rappels -->
+                                <div class="reminders-card premium-feature">
+                                    <h3>Rappels</h3>
+                                    <div class="reminders-content">
+                                        <div class="reminders-list">
+                                            <!-- Liste des rappels -->
+                                        </div>
+                                        <button class="add-reminder-btn">
+                                            <span class="icon">⏰</span> Nouveau Rappel
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Modal Nouveau Rappel -->
+                                <div id="reminderModal" class="modal">
+                                    <div class="modal-content">
+                                        <h3>Configurer un Rappel</h3>
+                                        <form id="reminderForm">
+                                            <div class="form-group">
+                                                <label>Configuration du rappel</label>
+                                                <div class="reminder-config">
+                                                    <div class="time-config">
+                                                        <label>Heure spécifique</label>
+                                                        <input type="time" id="reminderTime">
+                                                        <small>Laissez vide pour un rappel immédiat</small>
+                                                    </div>
+                                                    
+                                                    <div class="date-config">
+                                                        <label>Date (optionnelle)</label>
+                                                        <input type="date" id="reminderDate">
+                                                        <small>Pour un rappel à une date précise</small>
+                                                    </div>
+                                                    
+                                                    <div class="frequency-config">
+                                                        <label>Répéter tous les</label>
+                                                        <div class="frequency-inputs">
+                                                            <input type="number" id="frequencyValue" min="1" placeholder="Nombre">
+                                                            <select id="frequencyUnit">
+                                                                <option value="minutes">minutes</option>
+                                                                <option value="hours">heures</option>
+                                                                <option value="days">jours</option>
+                                                                <option value="months">mois</option>
+                                                            </select>
+                                                        </div>
+                                                        <small>Laissez vide pour un rappel unique</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Message personnalisé</label>
+                                                <input type="text" id="reminderMessage" placeholder="Comment allez-vous ?">
+                                            </div>
+                                            <div class="modal-actions">
+                                                <button type="button" class="secondary-btn" id="cancelReminder">Annuler</button>
+                                                <button type="submit" class="primary-btn">Créer</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="export-section premium-feature">
+                                <h3>Exportation des Données</h3>
+                                <button id="openExportModal" class="primary-btn">
+                                    <span class="icon">📥</span> Exporter l'historique
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div id="premiumStatus" class="premium-status">
+                        <span class="status-icon">⭐</span>
+                        <span class="status-text">Version gratuite</span>
+                        <div class="dev-controls">
+                            <div class="dev-mode-switch">
+                                <label class="switch">
+                                    <input type="checkbox" id="devModeToggle">
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="dev-mode-label">Mode Essai</span>
+                            </div>
+                            <div class="premium-mode-switch">
+                                <label class="switch">
+                                    <input type="checkbox" id="premiumModeToggle">
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="dev-mode-label">Mode Premium</span>
+                            </div>
+                            <button id="resetTrialBtn" class="dev-btn">Réinitialiser Essai</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+        </footer>
+    </div>
+    <script src="vendor/chart.js"></script>
+    <script type="module" src="js/sample-data.js"></script>
+    <script type="module" src="js/premium-features.js"></script>
+    <script type="module" src="js/premium.js"></script>
+    <script type="module" src="js/sidepanel.js"></script>
+</body>
+</html> 
