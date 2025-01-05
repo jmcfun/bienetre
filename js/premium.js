@@ -1,4 +1,5 @@
 import { premiumFeatures } from './premium-features.js';
+import { PaymentService } from './services/payment-service.js';
 
 export class PremiumManager {
     constructor() {
@@ -215,4 +216,30 @@ document.querySelector('.try-premium-btn')?.addEventListener('click', () => {
 
 document.querySelector('#upgradeToPremium')?.addEventListener('click', () => {
     premiumManager.upgradeToPremium();
+});
+
+const paymentService = new PaymentService();
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Gérer le clic sur le bouton d'abonnement
+    const subscribeBtn = document.querySelector('.subscribe-premium-btn');
+    if (subscribeBtn) {
+        subscribeBtn.addEventListener('click', async () => {
+            try {
+                subscribeBtn.disabled = true;
+                subscribeBtn.innerHTML = '<span class="icon">⌛</span> Redirection...';
+
+                await paymentService.handlePayment(paymentService.PLANS.MONTHLY.id);
+            } catch (error) {
+                console.error('Erreur lors de l\'abonnement:', error);
+                showNotification('Erreur lors de la redirection vers le paiement', true);
+            } finally {
+                subscribeBtn.disabled = false;
+                subscribeBtn.innerHTML = `
+                    <span class="icon">⭐</span> S'abonner à Premium
+                    <span class="price">4.99€/mois</span>
+                `;
+            }
+        });
+    }
 }); 

@@ -134,3 +134,22 @@ function shouldTriggerReminder(reminder, now) {
     // Cas 4: Rappel immédiat unique
     return now >= createdAt && lastCheck <= createdAt;
 } 
+
+// Initialiser le service de paiement
+import { PaymentService } from './services/payment-service.js';
+const paymentService = new PaymentService();
+
+// Vérifier l'abonnement au démarrage
+chrome.runtime.onStartup.addListener(async () => {
+    await paymentService.verifySubscription();
+});
+
+// Écouter les messages liés aux abonnements
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'CHECK_SUBSCRIPTION') {
+        paymentService.verifySubscription()
+            .then(status => sendResponse(status))
+            .catch(error => sendResponse({ error: error.message }));
+        return true; // Indique que la réponse sera asynchrone
+    }
+}); 
